@@ -12,7 +12,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Contiene m閠odos para trabajar con TiledMaps
+ * Contiene m茅todos para trabajar con TiledMaps
  * @author Santiago Faci
  * @version 1.0
  *
@@ -35,14 +35,14 @@ public class TiledMapManager {
 	public static TiledMapTileLayer collisionLayer;
 	public static MapLayer objectLayer;
 	
-	// Tama駉s de las plataformas m髒iles
+	// Tama帽os de las plataformas m贸viles
 	public static final int PLATFORM_WIDTH = 16;
 	public static final int PLATFORM_HEIGHT = 16;
 			
 	/**
 	 * Coloca tiles animados
-	 * @param animationString Key que identifica al tipo de tile de animaci髇
-	 * @param n N鷐ero de tiles que componen la animaci髇
+	 * @param animationString Key que identifica al tipo de tile de animaci贸n
+	 * @param n N煤mero de tiles que componen la animaci贸n
 	 */
 	public static void animateTiles(String animationString, int n) {
 		
@@ -56,13 +56,13 @@ public class TiledMapManager {
 			}
 		}
 		
-		// Crea un tile animado y le asigna las propiedades de todos los tiles que forman la animaci髇
+		// Crea un tile animado y le asigna las propiedades de todos los tiles que forman la animaci贸n
 		AnimatedTiledMapTile animatedTile = new AnimatedTiledMapTile(1 / 4f, frameTiles);
-		// El Tile animado tiene que heredar todas las propiedades de los tiles est醫icos que lo forman
+		// El Tile animado tiene que heredar todas las propiedades de los tiles est谩ticos que lo forman
 		for (TiledMapTile tile : frameTiles)
 			animatedTile.getProperties().putAll(tile.getProperties());
 		
-		// Coloca el tile animado donde haya un tile del mismo tipo pero est醫ico
+		// Coloca el tile animado donde haya un tile del mismo tipo pero est谩tico
 		for (int x = 0; x < collisionLayer.getWidth(); x++) {
 			for (int y = 0; y < collisionLayer.getHeight(); y++) {
 				Cell cell = collisionLayer.getCell(x, y);
@@ -77,7 +77,7 @@ public class TiledMapManager {
 	}
 	
 	/**
-	 * Devuelve el tile de una caja vac韆, para sustituir a la del interrogante
+	 * Devuelve el tile de una caja vac铆a, para sustituir a la del interrogante
 	 * @param map El mapa actual
 	 * @return El tile
 	 */

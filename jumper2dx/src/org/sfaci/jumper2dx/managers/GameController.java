@@ -1,7 +1,7 @@
 package org.sfaci.jumper2dx.managers;
 
 import org.sfaci.jumper2dx.Jumper2DX;
-import org.sfaci.jumper2dx.PauseScreen;
+import org.sfaci.jumper2dx.screens.PauseScreen;
 import org.sfaci.jumper2dx.characters.Enemy;
 import org.sfaci.jumper2dx.characters.Item;
 import org.sfaci.jumper2dx.characters.Platform;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Controla toda la lÛgica del juego
+ * Controla toda la l√≥gica del juego
  * @author Santiago Faci
  * @version 1.0
  *
@@ -47,11 +47,11 @@ public class GameController implements InputProcessor {
 	}
 	
 	/**
-	 * Reinicia los par·metros de la partida
+	 * Reinicia los parÔøΩmetros de la partida
 	 */
 	private void restart() {
 	
-		// Inicia los par·metros de la partida
+		// Inicia los parÔøΩmetros de la partida
 		LevelManager.currentCoins = 0;
 		lives = LevelManager.currentLives;
 		level = LevelManager.currentLevel;
@@ -67,11 +67,11 @@ public class GameController implements InputProcessor {
 		
 		// Crea el jugador y lo posiciona al inicio de la pantalla
 		player = new Player(this);
-		// posiciÛn inicial del jugador
+		// posici√≥n inicial del jugador
 		player.position.set(0 * LevelManager.map.getProperties().get("tilewidth", Integer.class), 
 							2 * LevelManager.map.getProperties().get("tileheight", Integer.class) + 32);
 		
-		// M˙sica durante la partida
+		// M√∫sica durante la partida
 		ResourceManager.getSound(LevelManager.getCurrentLevelName()).loop(0.5f);
 	}
 	
@@ -86,7 +86,7 @@ public class GameController implements InputProcessor {
 	
 	public void update(float dt) {
 		
-		// Comprobar entrada de usuario (teclado, pantalla, ratÛn, . . .)
+		// Comprobar entrada de usuario (teclado, pantalla, rat√≥n, . . .)
 		handleInput();
 		
 		if (game.paused)
@@ -95,13 +95,13 @@ public class GameController implements InputProcessor {
 		// Actualizar jugador
 		player.update(dt);
 		
-		// Comprueba colisiones del jugador con elementos mÛviles del juego
+		// Comprueba colisiones del jugador con elementos m√≥viles del juego
 		checkCollisions();
 		
 		// Comprueba el estado de los enemigos
 		for (Enemy enemy : LevelManager.enemies) {
 			
-			// Si la c·mara no los enfoca no se actualizan
+			// Si la c√°mara no los enfoca no se actualizan
 			if (!game.gameRenderer.camera.frustum.pointInFrustum(new Vector3(enemy.position.x, enemy.position.y, 0)))
 				continue;
 		
@@ -122,21 +122,21 @@ public class GameController implements InputProcessor {
 	}
 	
 	/**
-	 * Comprueba las colisiones del jugador con los elementos mÛviles del juego
+	 * Comprueba las colisiones del jugador con los elementos m√≥viles del juego
 	 * Enemigos e items
 	 */
 	private void checkCollisions() {
 		Rectangle playerRect = new Rectangle();
 		playerRect.set(player.position.x, player.position.y, Player.WIDTH, Player.HEIGHT);
 		
-		// Comprueba si el enemigo ha chocado contra alg˙n enemigo
+		// Comprueba si el enemigo ha chocado contra alg√∫n enemigo
 		for (Enemy enemy : LevelManager.enemies) {
 			Rectangle enemyRect = new Rectangle();
 			enemyRect.set(enemy.position.x, enemy.position.y, Enemy.WIDTH, Enemy.HEIGHT);
 			
 			if (enemyRect.overlaps(playerRect)) {
 				
-				// Si el jugador est· por encima elimina el enemigo
+				// Si el jugador est√° por encima elimina el enemigo
 				if (player.position.y > (enemy.position.y + 5)) {
 					ResourceManager.getSound("kick").play();
 					LevelManager.enemies.removeValue(enemy, true);
@@ -144,7 +144,7 @@ public class GameController implements InputProcessor {
 					// El jugador rebota
 					player.jump(false);
 				}
-				// Si est· al mismo nivel o por debajo se pierde una vida
+				// Si est√° al mismo nivel o por debajo se pierde una vida
 				else {
 					player.velocity.x = player.velocity.y = 0;
 					lives--;
@@ -160,7 +160,7 @@ public class GameController implements InputProcessor {
 			}
 		}
 		
-		// Comprueba si el jugador recoge alg˙n item de la pantalla
+		// Comprueba si el jugador recoge alg√∫n item de la pantalla
 		for (Item item : LevelManager.items) {
 			Rectangle itemRect = new Rectangle();
 			itemRect.set(item.position.x, item.position.y, Item.WIDTH, Item.HEIGHT);
@@ -173,14 +173,14 @@ public class GameController implements InputProcessor {
 		}
 		
 		boolean stuck = false;
-		// Comprueba colisiones con las plataformas mÛviles de la pantalla
+		// Comprueba colisiones con las plataformas m√≥viles de la pantalla
 		for (Platform platform : LevelManager.platforms) {
 			Rectangle platformRectangle = new Rectangle(platform.position.x, platform.position.y, platform.width, platform.height);
 				
 			// Si colisiona con una se coloca encima y se "pega" a ella
 			if (platformRectangle.overlaps(playerRect)) {
 				
-				// Si est· cayendo y est· por encima se coloca en la plataforma
+				// Si est√° cayendo y est√° por encima se coloca en la plataforma
 				if ((player.velocity.y < 0) && (player.position.y > platformRectangle.y)) {
 					player.position.y = platformRectangle.y + platformRectangle.height;
 					player.canJump = true;
@@ -190,7 +190,7 @@ public class GameController implements InputProcessor {
 				}
 			}
 		}
-		// Si ya no est· encima de ninguna plataforma, se "despega" de ellas
+		// Si ya no est√° encima de ninguna plataforma, se "despega" de ellas
 		if (!stuck)
 			Player.stuckPlatform = null;
 	}
@@ -249,12 +249,12 @@ public class GameController implements InputProcessor {
 			GameRenderer.CAMERA_OFFSET -= 40f * Gdx.graphics.getDeltaTime(); 
 		}
 		
-		// Controla los lÌmites (por debajo) de la pantalla, cuando cae el personaje
+		// Controla los l√≠mites (por debajo) de la pantalla, cuando cae el personaje
 		if (player.position.y < 0) {
 			player.die();
 		}
 		
-		// Controla el lÌmite izquierdo de la pantalla
+		// Controla el l√≠mite izquierdo de la pantalla
 		if (player.position.x <= 0)
 			player.position.x = 0;
 	}
@@ -273,13 +273,11 @@ public class GameController implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -293,31 +291,26 @@ public class GameController implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

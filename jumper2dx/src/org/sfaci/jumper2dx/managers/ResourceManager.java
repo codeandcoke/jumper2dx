@@ -6,6 +6,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
  * Gestor de recursos de sonido e imagen del juego
@@ -17,6 +18,7 @@ public class ResourceManager {
 
 	private static Map<String, Sound> sounds = new HashMap<String, Sound>();
 	private static Map<String, Texture> textures = new HashMap<String, Texture>();
+    private static TextureAtlas atlas = new TextureAtlas();
 	
 	/**
 	 * Carga los sonidos del juego
@@ -42,14 +44,20 @@ public class ResourceManager {
 	 */
 	public static void loadTextures() {
 		
-		// Para que no nos obligue a que las im·genes tengan tamaÒos potencia de 2
+		// Para que no nos obligue a que las im√°genes tengan tama√±os potencia de 2
 		Texture.setEnforcePotImages(false);
 		
-		// Carga algunas textura para la informaciÛn en pantalla
+		// Carga algunas textura para la informaci√≥n en pantalla
 		loadTexture("item_coin", new Texture(Gdx.files.internal("items/coin.png")));
 		loadTexture("item_life", new Texture(Gdx.files.internal("items/life.png")));
 		loadTexture("item_cloud", new Texture(Gdx.files.internal("items/cloud.png")));
+
+        atlas = new TextureAtlas(Gdx.files.internal("characters/mario/mario.pack"));
 	}
+
+    public static TextureAtlas getAtlas() {
+        return atlas;
+    }
 	
 	/**
 	 * Carga una textura

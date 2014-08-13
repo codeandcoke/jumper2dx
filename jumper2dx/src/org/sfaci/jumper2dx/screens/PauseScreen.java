@@ -1,5 +1,6 @@
-package org.sfaci.jumper2dx;
+package org.sfaci.jumper2dx.screens;
 
+import org.sfaci.jumper2dx.Jumper2DX;
 import org.sfaci.jumper2dx.Jumper2DX.GameState;
 import org.sfaci.jumper2dx.managers.LevelManager;
 
@@ -9,7 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 /**
- * Menú intermedio de juego (cuando matan al jugador)
+ * MenÃº intermedio de juego (cuando matan al jugador)
  * @author Santiago Faci
  * @version 1.0
  *
@@ -20,9 +21,8 @@ public class PauseScreen implements Screen {
 	
 	OrthographicCamera camera;
 	public State state;
-	private Screen oldScreen;
 	
-	// Indica si se ha pausado la pantalla voluntariamente o por haber sido dañado el jugador
+	// Indica si se ha pausado la pantalla voluntariamente o por haber sido daÃ±ado el jugador
 	public enum State {
 		PAUSE, DAMAGE;
 	}
@@ -45,7 +45,7 @@ public class PauseScreen implements Screen {
 		game.gameRenderer.font.setScale(2);
 		
 		LevelManager.currentCoins = 0;
-		game.gameRenderer.font.draw(game.gameRenderer.batch, "¡¡Tocado!!", 250, 500);
+		game.gameRenderer.font.draw(game.gameRenderer.batch, "Â¡Â¡Tocado!!", 250, 500);
 		game.gameRenderer.font.draw(game.gameRenderer.batch, "Toca la pantalla o una tecla para volver a intentarlo", 250, 450);
 		game.gameRenderer.batch.end();
 		

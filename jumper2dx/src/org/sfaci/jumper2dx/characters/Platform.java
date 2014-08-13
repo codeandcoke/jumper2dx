@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Representa una plataforma m髒il en el juego
+ * Representa una plataforma m贸vil en el juego
  * @author Santiago Faci
  * @version 1.0
  *
@@ -29,13 +29,13 @@ public class Platform {
 	private float SPEED = 30f;
 	
 	/**
-	 * Construye una plataforma m髒il
-	 * @param x Posici髇 x inicial
-	 * @param y Posici髇 y inicial
+	 * Construye una plataforma m贸vil
+	 * @param x Posici贸n x inicial
+	 * @param y Posici贸n y inicial
 	 * @param width Anchura
 	 * @param height Altura
-	 * @param offset Desplazamiento m醲imo
-	 * @param rightDirection Indica si empieza moviendose a la derecha
+	 * @param offset Desplazamiento m谩ximo
+	 * @param direction Indica si empieza moviendose a la derecha
 	 */
 	public Platform(float x, float y, float width, float height, int offset, Direction direction) {
 		this.originalPosition.x = x;
@@ -60,7 +60,7 @@ public class Platform {
 	}
 	
 	/**
-	 * Actualiza la posici髇 y direcci髇 de la plataforma
+	 * Actualiza la posici贸n y direcci贸n de la plataforma
 	 * @param dt
 	 */
 	public void update(float dt) {

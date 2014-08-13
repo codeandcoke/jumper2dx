@@ -1,8 +1,8 @@
 package org.sfaci.jumper2dx.characters;
 
-import org.sfaci.jumper2dx.GameScreen;
-import org.sfaci.jumper2dx.MainMenuScreen;
-import org.sfaci.jumper2dx.PauseScreen;
+import org.sfaci.jumper2dx.screens.GameScreen;
+import org.sfaci.jumper2dx.screens.MainMenuScreen;
+import org.sfaci.jumper2dx.screens.PauseScreen;
 import org.sfaci.jumper2dx.managers.GameController;
 import org.sfaci.jumper2dx.managers.GameRenderer;
 import org.sfaci.jumper2dx.managers.LevelManager;
@@ -10,9 +10,7 @@ import org.sfaci.jumper2dx.managers.ResourceManager;
 import org.sfaci.jumper2dx.managers.TiledMapManager;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -83,22 +81,16 @@ public class Player {
 		this.gameController = gameController;
 		
 		// Posiciones estáticas del personaje para izquierda y derecha en parado y salto
-		idleLeft = new Sprite(new Texture(Gdx.files.internal("characters/mario_idle_left.png")));
-		idleRight = new Sprite(new Texture(Gdx.files.internal("characters/mario_idle_right.png")));
-		walkLeft = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_left2.png")));
-		walkRight = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_right2.png")));
+		idleLeft = ResourceManager.getAtlas().findRegion("mario_idle_left");
+		idleRight = ResourceManager.getAtlas().findRegion("mario_idle_right");
+		walkLeft = ResourceManager.getAtlas().findRegion("mario_walk_left", 1);
+		walkRight = ResourceManager.getAtlas().findRegion("mario_walk_right", 1);
 		
 		// Crea la animación para correr hacia la derecha
-		TextureRegion[] rightMovements = new TextureRegion[2];
-		rightMovements[0] = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_right1.png")));
-		rightMovements[1] = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_right2.png")));
-		rightAnimation = new Animation(0.15f, rightMovements);
+		rightAnimation = new Animation(0.15f, ResourceManager.getAtlas().findRegions("mario_walk_right"));
 		
 		// Crea la animación para correr hacia la izquierda
-		TextureRegion[] leftMovements = new TextureRegion[2];
-		leftMovements[0] = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_left1.png")));
-		leftMovements[1] = new Sprite(new Texture(Gdx.files.internal("characters/mario_walk_left2.png")));
-		leftAnimation = new Animation(0.15f, leftMovements);
+		leftAnimation = new Animation(0.15f, ResourceManager.getAtlas().findRegions("mario_walk_left"));
 	}
 	
 	/**
@@ -276,7 +268,6 @@ public class Player {
 	 * @param startY
 	 * @param endX
 	 * @param endY
-	 * @return
 	 */
 	private void getTilesPosition(int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
 		

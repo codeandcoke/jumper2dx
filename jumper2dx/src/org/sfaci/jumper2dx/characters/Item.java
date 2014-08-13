@@ -32,7 +32,7 @@ public class Item implements Disposable {
 	private boolean faceLeft;
 	
 	private Array<Rectangle> tiles = new Array<Rectangle>();
-	// Pool de rectángulos (mejora la eficiencia si se trabaja con muchos)
+	// Pool de rectÃ¡ngulos (mejora la eficiencia si se trabaja con muchos)
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
 		@Override
 		protected Rectangle newObject () {
@@ -40,7 +40,7 @@ public class Item implements Disposable {
 		}
 	};
 	
-	// Parámetros de movimiento del Item
+	// ParÃ¡metros de movimiento del Item
 	public static float WALKING_SPEED = 1.0f;
 	public static float JUMPING_SPEED = 5.0f;
 	public static float MAX_JUMPING = 60f;
@@ -62,7 +62,7 @@ public class Item implements Disposable {
 	}
 	
 	/**
-	 * Pinta la animación en pantalla
+	 * Pinta la animaciÃ³n en pantalla
 	 */
 	public void render(SpriteBatch spriteBatch) {
 				
@@ -71,8 +71,7 @@ public class Item implements Disposable {
 	}
 	
 	/**
-	 * Actualiza el estado del jugador en función de la tecla pulsada
-	 * @param input
+	 * Actualiza el estado del jugador en funciÃ³n de la tecla pulsada
 	 * @param dt
 	 */
 	public void update(float dt) {
@@ -91,13 +90,13 @@ public class Item implements Disposable {
 		// Aplica la fuerza de la gravedad (en el eje y)
 		velocity.y -= GRAVITY * dt;
 		
-		// Controla que el personaje nunca supere una velocidad límite en el eje y
+		// Controla que el personaje nunca supere una velocidad lÃ­mite en el eje y
 		if (velocity.y > JUMPING_SPEED)
 			velocity.y = JUMPING_SPEED;
 		else if (velocity.y < -JUMPING_SPEED)
 			velocity.y = -JUMPING_SPEED;
 		
-		// Escala la velocidad para calcular cuanto se avanza en este frame (para mayor precisión)
+		// Escala la velocidad para calcular cuanto se avanza en este frame (para mayor precisiÃ³n)
 		velocity.scl(dt);
 		
 		// Para el chequeo de colisiones
@@ -106,16 +105,16 @@ public class Item implements Disposable {
 		rect.set(position.x, position.y, 18, 18);
 		
 		// Comprueba las colisiones con tiles en el eje Y (he quitado + velocity.y en startY, endY)
-		// El item está saltando
+		// El item estÃ¡ saltando
 		if (velocity.y > 0)
 			startY = endY = (int) (position.y + HEIGHT + velocity.y);
-		// El item cae o está parado (no se tiene en cuenta su altura)
+		// El item cae o estï¿½ parado (no se tiene en cuenta su altura)
 		else
 			startY = endY = (int) (position.y + velocity.y);
 		
 		startX = (int) position.x;
 		endX = (int) (position.x + WIDTH);
-		// Obtiene la lista de tiles que ocupan la posición del item
+		// Obtiene la lista de tiles que ocupan la posiciÃ³n del item
 		getTilesPosition(startX, startY, endX, endY, tiles);
 		rect.y += velocity.y;
 		for (Rectangle tile : tiles) {
@@ -141,7 +140,7 @@ public class Item implements Disposable {
 		
 		startY = (int) position.y;
 		endY = (int) (position.y + HEIGHT);
-		// Obtiene la lista de tiles que ocupan la posición del item
+		// Obtiene la lista de tiles que ocupan la posiciï¿½n del item
 		getTilesPosition(startX, startY, endX, endY, tiles);
 		rect.x += velocity.x;
 		for (Rectangle tile : tiles) {
@@ -177,7 +176,7 @@ public class Item implements Disposable {
 				int yCell = (int) (y / TiledMapManager.collisionLayer.getTileHeight());
 				Cell cell = TiledMapManager.collisionLayer.getCell(xCell, yCell);
 				
-				// Si es un bloque se añade para comprobar colisiones
+				// Si es un bloque se aï¿½ade para comprobar colisiones
 				if ((cell != null) && (cell.getTile().getProperties().containsKey(TiledMapManager.BLOCKED))) {
 					Rectangle rect = rectPool.obtain();
 					

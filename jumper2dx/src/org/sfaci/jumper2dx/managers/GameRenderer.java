@@ -25,7 +25,7 @@ public class GameRenderer implements Disposable {
 	public SpriteBatch batch;
 	private GameController gameController;
 	
-	// Fuente para los men˙s
+	// Fuente para los men√∫s
 	public BitmapFont font;
 	
 	OrthogonalTiledMapRenderer mapRenderer;
@@ -42,7 +42,7 @@ public class GameRenderer implements Disposable {
 		
 		font = new BitmapFont();
 		
-		// Crea una c·mara y muestra 30x20 unidades del mundo
+		// Crea una c√°mara y muestra 30x20 unidades del mundo
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 30, 20);
 		camera.update();
@@ -63,10 +63,10 @@ public class GameRenderer implements Disposable {
 	
 	public void render() {
 		
-		// Fija la c·mara para seguir al personaje en el centro de la pantalla y altura fija (eje y)
+		// Fija la c√°mara para seguir al personaje en el centro de la pantalla y altura fija (eje y)
 		camera.position.set(gameController.player.position.x + 18 / 2, 125, 0);
 		
-		// En los niveles de alturas el jugador puede mover la c·mara hacia arriba y abajo
+		// En los niveles de alturas el jugador puede mover la c√°mara hacia arriba y abajo
 		if (LevelManager.highLevel)
 			camera.position.set(gameController.player.position.x + 18 / 2, 125 + CAMERA_OFFSET, 0);
 		
@@ -83,18 +83,18 @@ public class GameRenderer implements Disposable {
 			enemy.render(batch);
 		for (Item item : LevelManager.items)
 			item.render(batch);
-		// Pinta la informaciÛn en partida relativa al jugador
+		// Pinta la informaci√≥n en partida relativa al jugador
 		font.setScale(0.8f);
 		batch.draw(ResourceManager.getTexture("item_coin"), camera.position.x - 60, camera.position.y - 135 - 12);
 		font.draw(batch, " X " + LevelManager.currentCoins, camera.position.x - 50, camera.position.y - 135);
 		batch.draw(ResourceManager.getTexture("item_life"), camera.position.x + 40, camera.position.y - 135 - 12);
 		font.draw(batch, " X " + gameController.lives, camera.position.x + 50, camera.position.y - 135);
 		font.draw(batch, "level " + LevelManager.currentLevel, camera.position.x + 100, camera.position.y - 135);
-		// Pinta las plataformas mÛviles del nivel actual
+		// Pinta las plataformas m√≥viles del nivel actual
 		for (Platform platform : LevelManager.platforms)
 			platform.render(batch);
 		
-		// Si el juego est· pausado pinta el mensaje en pantalla
+		// Si el juego est√° pausado pinta el mensaje en pantalla
 		if (gameController.game.paused) {
 			font.draw(batch, "PAUSA", camera.position.x - 60, camera.position.y + 50);
 			font.draw(batch, "Pulsa P para seguir jugando", camera.position.x - 60, camera.position.y + 35);

@@ -37,7 +37,7 @@ public class LevelManager {
 	// Mapa del nivel actual
 	public static TiledMap map;
 	
-	// Par醡etros de nivel
+	// Par谩metros de nivel
 	public static int currentLevel = 1;
 	public static int currentLives = 3;
 	public static int totalCoins;
@@ -92,7 +92,7 @@ public class LevelManager {
 		
 		Enemy enemy = null;
 		
-		// Carga los objetos m髒iles del nivel actual
+		// Carga los objetos m贸viles del nivel actual
 		for (MapObject object : LevelManager.map.getLayers().get("objects").getObjects()) {
 			
 			if (object instanceof RectangleMapObject) {
@@ -109,21 +109,22 @@ public class LevelManager {
 	}
 	
 	/**
-	 * Sit鷄 un enemigo en la pantalla
-	 * @param x Posici髇 x
-	 * @param y Posici髇 y
+	 * Sit煤a un enemigo en la pantalla
+	 * @param x Posici贸n x
+	 * @param y Posici贸n y
 	 */
 	public static void addEnemy(float x, float y) {
 		
 		Enemy enemy = new Enemy();
-		enemy.position.set(x * map.getProperties().get("tilewidth", Integer.class), y * map.getProperties().get("tileheight", Integer.class));
+		enemy.position.set(x * map.getProperties().get("tilewidth", Integer.class), y * map.getProperties().get("tileheight",
+            Integer.class));
 		enemies.add(enemy);
 	}
 	
 	/**
 	 * Hace aparecer un nuevo Item en la pantalla
-	 * @param x Posici髇 x
-	 * @param y Posici髇 y
+	 * @param x Posici贸n x
+	 * @param y Posici贸n y
 	 */
 	public static void raiseItem(final int x, final int y) {
 		
@@ -139,8 +140,8 @@ public class LevelManager {
 	
 	/**
 	 * Elimina una moneda de la pantalla
-	 * @param x Posici髇 x de la moneda
-	 * @param y Posici髇 y de la moneda
+	 * @param x Posici贸n x de la moneda
+	 * @param y Posici贸n y de la moneda
 	 */
 	public static void removeCoin(int x, int y) {
 		
@@ -150,13 +151,13 @@ public class LevelManager {
 	}
 	
 	/**
-	 * Carga las plataformas m髒iles de la pantalla actual
+	 * Carga las plataformas m贸viles de la pantalla actual
 	 */
 	public static void loadPlatforms() {
 		
 		Platform platform = null;
 		
-		// Carga los objetos m髒iles del nivel actual
+		// Carga los objetos m贸viles del nivel actual
 		for (MapObject object : LevelManager.map.getLayers().get("objects").getObjects()) {
 			
 			if (object instanceof RectangleMapObject) {

@@ -1,5 +1,6 @@
-package org.sfaci.jumper2dx;
+package org.sfaci.jumper2dx.screens;
 
+import org.sfaci.jumper2dx.Jumper2DX;
 import org.sfaci.jumper2dx.Jumper2DX.GameState;
 
 import com.badlogic.gdx.Gdx;
@@ -21,8 +22,8 @@ public class GameScreen implements Screen {
 	}
 	
 	/*
-	 * MÈtodo que se invoca cuando esta pantalla es
-	 * la que se est· mostrando
+	 * M√©todo que se invoca cuando esta pantalla es
+	 * la que se est√° mostrando
 	 * @see com.badlogic.gdx.Screen#show()
 	 */
 	@Override
@@ -41,7 +42,7 @@ public class GameScreen implements Screen {
 	public void render(float dt) {
 		
 		if (!game.paused) {
-			// Actualizamos primero (es m·s eficiente)
+			// Actualizamos primero (es m√°s eficiente)
 			game.gameController.update(Gdx.graphics.getDeltaTime());
 		}
 		
@@ -53,7 +54,7 @@ public class GameScreen implements Screen {
 	}
 	
 	/*
-	 * MÈtodo que se invoca cuando est· pantalla
+	 * M√©todo que se invoca cuando esta pantalla
 	 * deja de ser la principal
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */

@@ -1,9 +1,12 @@
 package org.sfaci.jumper2dx;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import org.sfaci.jumper2dx.managers.GameController;
 import org.sfaci.jumper2dx.managers.GameRenderer;
 
 import com.badlogic.gdx.Game;
+import org.sfaci.jumper2dx.screens.MainMenuScreen;
 
 /**
  * Clase principal del juego
@@ -16,6 +19,7 @@ public class Jumper2DX extends Game {
 
 	public GameController gameController;
 	public GameRenderer gameRenderer;
+    private Skin skin;
 	
 	public boolean paused;
 	
@@ -25,7 +29,7 @@ public class Jumper2DX extends Game {
 	public GameState gameState; 
 	
 	/*
-	 * Método invocado en el momento de crearse la aplicación
+	 * MÃ©todo invocado en el momento de crearse la aplicaciÃ³n
 	 * @see com.badlogic.gdx.ApplicationListener#create()
 	 */
 	@Override
@@ -40,9 +44,16 @@ public class Jumper2DX extends Game {
 		setScreen(new MainMenuScreen(this));
 	}
 
+    public Skin getSkin() {
+        if (skin == null)
+            skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+
+        return skin;
+    }
+
 	/*
-	 * Método que se invoca cada vez que hay que renderizar
-	 * Es el método donde se actualiza también la lógica del juego
+	 * MÃ©todo que se invoca cada vez que hay que renderizar
+	 * Es el mÃ©todo donde se actualiza tambiÃ©n la lÃ³gica del juego
 	 * @see com.badlogic.gdx.ApplicationListener#pause()
 	 */
 	@Override
@@ -56,7 +67,7 @@ public class Jumper2DX extends Game {
 	}
 	
 	/*
-	 * Método invocado cuando se destruye la aplicación
+	 * MÃ©todo invocado cuando se destruye la aplicaciÃ³n
 	 * Siempre va precedido de una llamada a 'pause()'
 	 * @see com.badlogic.gdx.ApplicationListener#dispose()
 	 */
@@ -68,7 +79,7 @@ public class Jumper2DX extends Game {
 	
 	/*
 	 * Proporciona compatibilidad con Android
-	 * El juego puede ser pasado a segundo plano y debería ser pausado
+	 * El juego puede ser pasado a segundo plano y deberÃ­a ser pausado
 	 * 
 	 */
 	@Override
@@ -78,7 +89,7 @@ public class Jumper2DX extends Game {
 	
 	/*
 	 * Proporciona compatibilidad con Android
-	 * El juego puede ser pasado a primer plano después de haber sido pausado
+	 * El juego puede ser pasado a primer plano despuÃ©s de haber sido pausado
 	 * 
 	 */
 	@Override
