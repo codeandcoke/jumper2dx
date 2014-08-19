@@ -1,6 +1,7 @@
 package org.sfaci.jumper2dx.characters;
 
 import org.sfaci.jumper2dx.characters.Player.State;
+import org.sfaci.jumper2dx.managers.ResourceManager;
 import org.sfaci.jumper2dx.managers.TiledMapManager;
 
 import com.badlogic.gdx.Gdx;
@@ -18,8 +19,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Representa cualquier item del juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class Item implements Disposable {
 
@@ -55,7 +55,7 @@ public class Item implements Disposable {
 		faceLeft = true;
 			
 		// Textura del item
-		currentFrame = new Sprite(new Texture(Gdx.files.internal("items/mushroom.png")));
+		currentFrame = new Sprite(ResourceManager.getAtlas("items/items.pack").findRegion("mushroom"));
 		
 		velocity.x = -1.0f;
 		isAlive = true;
@@ -140,7 +140,7 @@ public class Item implements Disposable {
 		
 		startY = (int) position.y;
 		endY = (int) (position.y + HEIGHT);
-		// Obtiene la lista de tiles que ocupan la posici�n del item
+		// Obtiene la lista de tiles que ocupan la posición del item
 		getTilesPosition(startX, startY, endX, endY, tiles);
 		rect.x += velocity.x;
 		for (Rectangle tile : tiles) {
@@ -176,7 +176,7 @@ public class Item implements Disposable {
 				int yCell = (int) (y / TiledMapManager.collisionLayer.getTileHeight());
 				Cell cell = TiledMapManager.collisionLayer.getCell(xCell, yCell);
 				
-				// Si es un bloque se a�ade para comprobar colisiones
+				// Si es un bloque se añade para comprobar colisiones
 				if ((cell != null) && (cell.getTile().getProperties().containsKey(TiledMapManager.BLOCKED))) {
 					Rectangle rect = rectPool.obtain();
 					

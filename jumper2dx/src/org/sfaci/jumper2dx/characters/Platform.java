@@ -1,5 +1,6 @@
 package org.sfaci.jumper2dx.characters;
 
+import com.badlogic.gdx.graphics.Texture;
 import org.sfaci.jumper2dx.managers.ResourceManager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,8 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Representa una plataforma móvil en el juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class Platform {
 
@@ -56,7 +56,7 @@ public class Platform {
 	 */
 	public void render(SpriteBatch batch) {
 		
-		batch.draw(ResourceManager.getTexture("item_cloud"), position.x, position.y);
+		batch.draw(ResourceManager.getAtlas("items/items.pack").findRegion("cloud"), position.x, position.y);
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package org.sfaci.jumper2dx.characters;
 
 import org.sfaci.jumper2dx.characters.Player.State;
+import org.sfaci.jumper2dx.managers.ResourceManager;
 import org.sfaci.jumper2dx.managers.TiledMapManager;
 
 import com.badlogic.gdx.Gdx;
@@ -18,8 +19,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Representa a los enemigos (NPC) del juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class Enemy implements Disposable {
 
@@ -55,7 +55,7 @@ public class Enemy implements Disposable {
 		faceLeft = true;
 		
 		// Textura del enemigo
-		currentFrame = new Sprite(new Texture(Gdx.files.internal("characters/enemy.png")));
+		currentFrame = new TextureRegion(ResourceManager.getAtlas("characters/characters.pack").findRegion("enemy"));
 		
 		velocity.x = -1.0f;
 		isAlive = true;

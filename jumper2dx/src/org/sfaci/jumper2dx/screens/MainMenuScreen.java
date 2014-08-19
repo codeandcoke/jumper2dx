@@ -14,22 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.sfaci.jumper2dx.Jumper2DX;
 
 /**
- * Men� principal del juego
+ * Menú principal del juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class MainMenuScreen implements Screen {
 	
 	final Jumper2DX game;
     private Stage stage;
 	
-	OrthographicCamera camera;
-	
 	public MainMenuScreen(Jumper2DX game) {
 		this.game = game;
-		// Reseta los parámetros de la partida
-		this.game.gameController.prepareGame();
 	}
 
     @Override

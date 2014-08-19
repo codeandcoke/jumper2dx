@@ -1,11 +1,9 @@
 package org.sfaci.jumper2dx.characters;
 
-import org.sfaci.jumper2dx.screens.GameScreen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import org.sfaci.jumper2dx.screens.MainMenuScreen;
-import org.sfaci.jumper2dx.screens.PauseScreen;
-import org.sfaci.jumper2dx.managers.GameController;
-import org.sfaci.jumper2dx.managers.GameRenderer;
-import org.sfaci.jumper2dx.managers.LevelManager;
+import org.sfaci.jumper2dx.managers.SpriteManager;
 import org.sfaci.jumper2dx.managers.ResourceManager;
 import org.sfaci.jumper2dx.managers.TiledMapManager;
 
@@ -23,7 +21,7 @@ import com.badlogic.gdx.utils.Pool;
  * Representa al jugador
  * Las animaciones están basadas en sprites de 18x28 px
  * @author Santiago Faci
- * @version 1.0
+ * @version Agosto 2014
  */
 public class Player {
 
@@ -33,7 +31,8 @@ public class Player {
 	public boolean canJump;
 	public boolean isRunning;
 	public boolean isJumping;
-	
+
+    // Plataforma sobre la que actualmente está subido el personaje
 	public static Platform stuckPlatform;
 	
 	// Anota que el personaje ha perdido una vida
@@ -50,7 +49,7 @@ public class Player {
 	private Animation rightAnimation;
 	private Animation leftAnimation;
 	
-	private GameController gameController;
+	private SpriteManager spriteManager;
 	
 	public enum State {
 		IDLE_LEFT, IDLE_RIGHT, RUNNING_LEFT, RUNNING_RIGHT
@@ -73,24 +72,25 @@ public class Player {
 	public static float WIDTH = 18;
 	public static float HEIGHT = 28;
 	
-	public Player(GameController gameController) {
+	public Player(SpriteManager spriteManager) {
 		
 		position = new Vector2();
 		velocity = new Vector2();
 		state = State.IDLE_RIGHT;
-		this.gameController = gameController;
+		this.spriteManager = spriteManager;
 		
 		// Posiciones estáticas del personaje para izquierda y derecha en parado y salto
-		idleLeft = ResourceManager.getAtlas().findRegion("mario_idle_left");
-		idleRight = ResourceManager.getAtlas().findRegion("mario_idle_right");
-		walkLeft = ResourceManager.getAtlas().findRegion("mario_walk_left", 1);
-		walkRight = ResourceManager.getAtlas().findRegion("mario_walk_right", 1);
+        TextureAtlas atlas = ResourceManager.assets.get("characters/characters.pack", TextureAtlas.class);
+		idleLeft = atlas.findRegion("mario_idle_left");
+		idleRight = atlas.findRegion("mario_idle_right");
+		walkLeft = atlas.findRegion("mario_walk_left", 1);
+		walkRight = atlas.findRegion("mario_walk_right", 1);
 		
 		// Crea la animación para correr hacia la derecha
-		rightAnimation = new Animation(0.15f, ResourceManager.getAtlas().findRegions("mario_walk_right"));
+		rightAnimation = new Animation(0.15f, atlas.findRegions("mario_walk_right"));
 		
 		// Crea la animación para correr hacia la izquierda
-		leftAnimation = new Animation(0.15f, ResourceManager.getAtlas().findRegions("mario_walk_left"));
+		leftAnimation = new Animation(0.15f, atlas.findRegions("mario_walk_left"));
 	}
 	
 	/**
@@ -229,7 +229,7 @@ public class Player {
 		Player.stuckPlatform = null;
 		
 		if (sound)
-			ResourceManager.getSound("jump").play();
+			ResourceManager.getSound("sounds/jump.wav").play();
 		
 		velocity.y = Player.JUMPING_SPEED;
 		canJump = false;
@@ -243,22 +243,22 @@ public class Player {
 		
 		dead = true;
 		velocity.x = velocity.y = 0;
-		gameController.lives--;
-		GameRenderer.CAMERA_OFFSET = 0;
-		ResourceManager.getSound(LevelManager.getCurrentLevelName()).stop();
-		if (gameController.lives == 0) {
-			ResourceManager.getSound("game_over").play();
+		spriteManager.CAMERA_OFFSET = 0;
+		spriteManager.music.stop();
+        ResourceManager.getSound("sounds/player_down.wav").play(0.5f);
+
+		if (spriteManager.levelManager.currentLives == 1) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException ie) {}
-			gameController.game.setScreen(new MainMenuScreen(gameController.game));
+            ResourceManager.getSound("sounds/game_over.wav").play();
+            spriteManager.game.getScreen().dispose();
+            spriteManager.levelManager.restartCurrentLevel();
+			spriteManager.game.setScreen(new MainMenuScreen(spriteManager.game));
 		}
 		else {
-			ResourceManager.getSound("down").play(0.5f);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException ie) {}
-			gameController.game.setScreen(new PauseScreen(gameController.game, PauseScreen.State.DAMAGE));
+            spriteManager.levelManager.restartCurrentLevel();
+            spriteManager.loadCurrentLevel();
 		}
 	}
 	
@@ -298,16 +298,17 @@ public class Player {
 						if (cell.getTile().getProperties().containsKey(TiledMapManager.BOX)) {
 							
 							// Sale el item de la caja
-							ResourceManager.getSound("item").play();
-							LevelManager.raiseItem((int) (Math.ceil(x / tileWidth) * tileWidth), 
+							ResourceManager.getSound("sounds/item_appears.wav").play();
+							spriteManager.levelManager.raiseItem((int) (Math.ceil(x / tileWidth) * tileWidth),
 												   (int) (Math.ceil(y / tileHeight) * tileHeight));
 							
-							cell.setTile(TiledMapManager.getEmptyBox(LevelManager.map));
+							cell.setTile(TiledMapManager.getEmptyBox(spriteManager.levelManager.map));
 						}
 				}
 				// Si es una moneda, desaparece
 				else if ((cell != null) && (cell.getTile().getProperties().containsKey(TiledMapManager.COIN))) {
-					LevelManager.removeCoin(xCell, yCell);
+                    ResourceManager.getSound("sounds/coin.wav").play();
+					spriteManager.levelManager.removeCoin(xCell, yCell);
 				}
 				// Si es un enemigo pierde una vida
 				else if ((cell != null) && (cell.getTile().getProperties().containsKey(TiledMapManager.ENEMY))) {
@@ -317,11 +318,14 @@ public class Player {
 				}
 				// Si es un cofre se abre y se termina la pantalla
 				else if ((cell != null) && (cell.getTile().getProperties().containsKey(TiledMapManager.CHEST))) {
-					// TODO Terminar la pantalla y pasar a la siguiente
+
 					if (!levelCleared) {
 						levelCleared = true;
-						LevelManager.finishLevel();
-						gameController.game.setScreen(new GameScreen(gameController.game));
+
+                        spriteManager.music.stop();
+                        ResourceManager.getSound("sounds/level_clear.wav").play();
+						spriteManager.levelManager.finishCurrentLevel();
+                        spriteManager.passCurrentLevel();
 					}
 				}
 			}

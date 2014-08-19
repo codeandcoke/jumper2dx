@@ -1,11 +1,12 @@
 package org.sfaci.jumper2dx.managers;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import org.sfaci.jumper2dx.characters.Enemy;
 import org.sfaci.jumper2dx.characters.Item;
 import org.sfaci.jumper2dx.characters.Platform;
 import org.sfaci.jumper2dx.characters.Platform.Direction;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,8 +20,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 /**
  * Gestor de niveles del juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class LevelManager {
 
@@ -35,36 +35,48 @@ public class LevelManager {
 	public static Array<Platform> platforms = new Array<Platform>();
 	
 	// Mapa del nivel actual
-	public static TiledMap map;
+	public TiledMap map;
 	
 	// Parámetros de nivel
-	public static int currentLevel = 1;
-	public static int currentLives = 3;
-	public static int totalCoins;
-	public static int currentCoins;
+	public int currentLevel;
+	public int currentLives;
+	public int totalCoins;
+	public int currentCoins;
 
-	public static boolean highLevel = false;
+    // Indica si la pantalla actual es más alta que la cámara
+	public boolean highLevel;
+
+    public LevelManager() {
+
+        currentLevel = 1;
+        currentLives = 3;
+        currentCoins = 0;
+        totalCoins = 0;
+        highLevel = true;
+    }
 	
-	public static void passLevel() {
+	public void passCurrentLevel() {
 		currentLevel++;
 	}
 	
-	public static String getCurrentLevelName() {
-		return LEVEL_PREFIX + LevelManager.currentLevel;
+	public String getCurrentLevelName() {
+		return LEVEL_PREFIX + currentLevel;
 	}
 	
-	public static String getCurrentLevelPath() {
-		return LEVEL_DIR + "/" + LevelManager.getCurrentLevelName() + LEVEL_EXTENSION;
+	public String getCurrentLevelPath() {
+		return LEVEL_DIR + "/" + getCurrentLevelName() + LEVEL_EXTENSION;
 	}
 	
 	/**
 	 * Carga el mapa de la pantalla actual
 	 */
-	public static void loadMap() {
-		
-		LevelManager.map = new TmxMapLoader().load(LevelManager.getCurrentLevelPath());
-		TiledMapManager.collisionLayer = (TiledMapTileLayer) LevelManager.map.getLayers().get("terrain");
-		TiledMapManager.objectLayer = (MapLayer) LevelManager.map.getLayers().get("objects");
+	public void loadCurrentMap() {
+
+        TiledMapManager.setLevelManager(this);
+
+		map = new TmxMapLoader().load(getCurrentLevelPath());
+		TiledMapManager.collisionLayer = (TiledMapTileLayer) map.getLayers().get("terrain");
+		TiledMapManager.objectLayer = map.getLayers().get("objects");
 		
 		loadAnimateTiles();
 		loadEnemies();
@@ -74,7 +86,7 @@ public class LevelManager {
 	/**
 	 * Carga los tiles animados
 	 */
-	private static void loadAnimateTiles() {
+	private void loadAnimateTiles() {
 		
 		// Anima los tiles animados
 		TiledMapManager.animateTiles(TiledMapManager.COIN, 4);
@@ -88,12 +100,12 @@ public class LevelManager {
 	/**
 	 * Carga los enemigos del nivel actual
 	 */
-	private static void loadEnemies() {
+	private void loadEnemies() {
 		
 		Enemy enemy = null;
 		
 		// Carga los objetos móviles del nivel actual
-		for (MapObject object : LevelManager.map.getLayers().get("objects").getObjects()) {
+		for (MapObject object : map.getLayers().get("objects").getObjects()) {
 			
 			if (object instanceof RectangleMapObject) {
 				RectangleMapObject rectangleObject = (RectangleMapObject) object;
@@ -113,7 +125,7 @@ public class LevelManager {
 	 * @param x Posición x
 	 * @param y Posición y
 	 */
-	public static void addEnemy(float x, float y) {
+	public void addEnemy(float x, float y) {
 		
 		Enemy enemy = new Enemy();
 		enemy.position.set(x * map.getProperties().get("tilewidth", Integer.class), y * map.getProperties().get("tileheight",
@@ -126,7 +138,7 @@ public class LevelManager {
 	 * @param x Posición x
 	 * @param y Posición y
 	 */
-	public static void raiseItem(final int x, final int y) {
+	public void raiseItem(final int x, final int y) {
 		
 		Timer.schedule(new Task(){
 		    @Override
@@ -143,22 +155,21 @@ public class LevelManager {
 	 * @param x Posición x de la moneda
 	 * @param y Posición y de la moneda
 	 */
-	public static void removeCoin(int x, int y) {
+	public void removeCoin(int x, int y) {
 		
 		TiledMapManager.collisionLayer.setCell(x, y, TiledMapManager.collisionLayer.getCell(0, 5));
-		ResourceManager.getSound("coin").play();
 		currentCoins++;
 	}
 	
 	/**
 	 * Carga las plataformas móviles de la pantalla actual
 	 */
-	public static void loadPlatforms() {
+	public void loadPlatforms() {
 		
 		Platform platform = null;
 		
 		// Carga los objetos móviles del nivel actual
-		for (MapObject object : LevelManager.map.getLayers().get("objects").getObjects()) {
+		for (MapObject object : map.getLayers().get("objects").getObjects()) {
 			
 			if (object instanceof RectangleMapObject) {
 				RectangleMapObject rectangleObject = (RectangleMapObject) object;
@@ -180,29 +191,44 @@ public class LevelManager {
 	}
 	
 	/**
-	 * Limpia el nivel actual
+	 * Elimina los personajes del el nivel actual
 	 */
-	public static void clearLevel() {
+	public void clearCharactersCurrentLevel() {
 		LevelManager.enemies.clear();
 		LevelManager.items.clear();
 		LevelManager.platforms.clear();
 	}
 	
 	/**
-	 * Finaliza el nivel actual y prepara el siguiente
+	 * Finaliza y limpia el nivel actual
 	 */
-	public static void finishLevel() {
-	
-		ResourceManager.getSound(LevelManager.getCurrentLevelName()).stop();
-		ResourceManager.getSound("level_clear").play();
-		try {
+	public void finishCurrentLevel() {
+
+        try {
 			Thread.sleep(2000);
 		} catch (InterruptedException ie) {}
-	
-		LevelManager.clearLevel();
-		LevelManager.currentLevel++;
+
+        totalCoins += currentCoins;
+        currentCoins = 0;
+
+		clearCharactersCurrentLevel();
 		// FIXME Anotarlo y leerlo en el mapa
-		if (LevelManager.currentLevel == 3)
-			LevelManager.highLevel = true;
+		if (currentLevel == 3)
+			highLevel = true;
 	}
+
+    /**
+     * Reinicia la pantalla actual
+     * (Normalmente para jugarla otra vez)
+     */
+    public void restartCurrentLevel() {
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ie) {}
+
+        currentCoins = 0;
+        currentLives--;
+        clearCharactersCurrentLevel();
+    }
 }

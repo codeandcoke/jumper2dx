@@ -3,7 +3,7 @@ package org.sfaci.jumper2dx.managers;
 /**
  * Gestiona la configuración de la partida
  * @author Santiago
- * @version 1.0
+ * @version Agosto 2014
  */
 public class ConfigurationManager {
 

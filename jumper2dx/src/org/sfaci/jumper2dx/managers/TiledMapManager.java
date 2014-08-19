@@ -14,8 +14,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Contiene métodos para trabajar con TiledMaps
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class TiledMapManager {
 
@@ -34,11 +33,15 @@ public class TiledMapManager {
 	
 	public static TiledMapTileLayer collisionLayer;
 	public static MapLayer objectLayer;
+    public static LevelManager levelManager;
 	
 	// Tamaños de las plataformas móviles
 	public static final int PLATFORM_WIDTH = 16;
 	public static final int PLATFORM_HEIGHT = 16;
-			
+
+    public static void setLevelManager(LevelManager levelManager) {
+        TiledMapManager.levelManager = levelManager;
+    }
 	/**
 	 * Coloca tiles animados
 	 * @param animationString Key que identifica al tipo de tile de animación
@@ -48,7 +51,7 @@ public class TiledMapManager {
 		
 		// Localiza los tiles anotados como animaciones en el tileset
 		Array<StaticTiledMapTile> frameTiles = new Array<StaticTiledMapTile>(n);
-		Iterator<TiledMapTile> tiles = LevelManager.map.getTileSets().getTileSet("tileset").iterator();
+		Iterator<TiledMapTile> tiles = TiledMapManager.levelManager.map.getTileSets().getTileSet("tileset").iterator();
 		while (tiles.hasNext()) {
 			TiledMapTile tile = tiles.next();
 			if ((tile.getProperties().containsKey(ANIMATION)) && (tile.getProperties().get(ANIMATION, String.class).equals(animationString))) {

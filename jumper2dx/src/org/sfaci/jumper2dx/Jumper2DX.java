@@ -1,26 +1,25 @@
 package org.sfaci.jumper2dx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import org.sfaci.jumper2dx.managers.GameController;
-import org.sfaci.jumper2dx.managers.GameRenderer;
 
 import com.badlogic.gdx.Game;
-import org.sfaci.jumper2dx.screens.MainMenuScreen;
+import org.sfaci.jumper2dx.screens.SplashScreen;
 
 /**
  * Clase principal del juego
  * 
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class Jumper2DX extends Game {
 
-	public GameController gameController;
-	public GameRenderer gameRenderer;
     private Skin skin;
-	
+	public SpriteBatch batch;
+    public BitmapFont font;
+
 	public boolean paused;
 	
 	public enum GameState {
@@ -34,14 +33,10 @@ public class Jumper2DX extends Game {
 	 */
 	@Override
 	public void create() {
-		
-		gameController = new GameController(this);
-		gameRenderer = new GameRenderer(gameController);
-		
-		paused = false;
-		gameState = GameState.START;
-		
-		setScreen(new MainMenuScreen(this));
+
+        batch = new SpriteBatch();
+        font = new BitmapFont(Gdx.files.internal("ui/default.fnt"));
+		setScreen(new SplashScreen(this));
 	}
 
     public Skin getSkin() {
@@ -63,7 +58,7 @@ public class Jumper2DX extends Game {
 	
 	@Override
 	public void resize(int width, int height) {
-		gameRenderer.resize(width, height);
+		getScreen().resize(width, height);
 	}
 	
 	/*
@@ -74,7 +69,7 @@ public class Jumper2DX extends Game {
 	@Override
 	public void dispose() {
 		
-		gameRenderer.dispose();
+		getScreen().dispose();
 	}
 	
 	/*

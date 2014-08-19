@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,87 +13,49 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 /**
  * Gestor de recursos de sonido e imagen del juego
  * @author Santiago Faci
- * @version 1.0
- *
+ * @version Agosto 2014
  */
 public class ResourceManager {
 
-	private static Map<String, Sound> sounds = new HashMap<String, Sound>();
-	private static Map<String, Texture> textures = new HashMap<String, Texture>();
-    private static TextureAtlas atlas = new TextureAtlas();
-	
-	/**
-	 * Carga los sonidos del juego
-	 */
-	public static void loadSounds() {
-		
-		// Carga los sonidos del juego
-		loadSound("coin",Gdx.audio.newSound(Gdx.files.internal("sounds/coin.wav")));
-		loadSound("jump", Gdx.audio.newSound(Gdx.files.internal("sounds/jump.wav")));
-		loadSound("down", Gdx.audio.newSound(Gdx.files.internal("sounds/player_down.wav")));
-		loadSound("game_over", Gdx.audio.newSound(Gdx.files.internal("sounds/game_over.wav")));
-		loadSound("level_clear", Gdx.audio.newSound(Gdx.files.internal("sounds/level_clear.wav")));
-		loadSound("kick", Gdx.audio.newSound(Gdx.files.internal("sounds/kick.wav")));
-		loadSound("level1", Gdx.audio.newSound(Gdx.files.internal("sounds/level1.mp3")));
-		loadSound("level2", Gdx.audio.newSound(Gdx.files.internal("sounds/level2.mp3")));
-		loadSound("level3", Gdx.audio.newSound(Gdx.files.internal("sounds/level3.mp3")));
-		loadSound("item", Gdx.audio.newSound(Gdx.files.internal("sounds/item_appears.wav")));
-		loadSound("up", Gdx.audio.newSound(Gdx.files.internal("sounds/1up.wav")));
-	}
-	
-	/**
-	 * Carga las texturas del juego
-	 */
-	public static void loadTextures() {
-		
-		// Para que no nos obligue a que las imágenes tengan tamaños potencia de 2
-		Texture.setEnforcePotImages(false);
-		
-		// Carga algunas textura para la información en pantalla
-		loadTexture("item_coin", new Texture(Gdx.files.internal("items/coin.png")));
-		loadTexture("item_life", new Texture(Gdx.files.internal("items/life.png")));
-		loadTexture("item_cloud", new Texture(Gdx.files.internal("items/cloud.png")));
+    public static AssetManager assets = new AssetManager();
 
-        atlas = new TextureAtlas(Gdx.files.internal("characters/mario/mario.pack"));
-	}
+    public static void loadAllResources() {
 
-    public static TextureAtlas getAtlas() {
-        return atlas;
+        // Sonidos y músicas
+        assets.load("sounds/coin.wav", Sound.class);
+        assets.load("sounds/jump.wav", Sound.class);
+        assets.load("sounds/player_down.wav", Sound.class);
+        assets.load("sounds/game_over.wav", Sound.class);
+        assets.load("sounds/level_clear.wav", Sound.class);
+        assets.load("sounds/kick.wav", Sound.class);
+        assets.load("sounds/level1.mp3", Music.class);
+        assets.load("sounds/level2.mp3", Music.class);
+        assets.load("sounds/level3.mp3", Music.class);
+        assets.load("sounds/item_appears.wav", Sound.class);
+        assets.load("sounds/1up.wav", Sound.class);
+
+        assets.load("items/items.pack", TextureAtlas.class);
+
+        assets.load("characters/characters.pack", TextureAtlas.class);
     }
-	
-	/**
-	 * Carga una textura
-	 * @param name Su nombre
-	 * @param texture La textura
-	 */
-	private static void loadTexture(String name, Texture texture) {
-		textures.put(name, texture);
-	}
-	
-	/**
-	 * Devuelve una textura
-	 * @param name Su nombre
-	 * @return La textura
-	 */
-	public static Texture getTexture(String name) {
-		return textures.get(name);
-	}
-	
-	/**
-	 * Carga un sonido
-	 * @param name Su nombre
-	 * @param sound El objeto de audio
-	 */
-	private static void loadSound(String name, Sound sound) {
-		sounds.put(name, sound);
-	}
-	
-	/**
-	 * Obtiene un sonido del juego
-	 * @param name Su nombre
-	 * @return El sonido
-	 */
-	public static Sound getSound(String name) {
-		return sounds.get(name);
-	}
+
+    public static boolean update() {
+        return assets.update();
+    }
+
+    public static TextureAtlas getAtlas(String path) {
+        return assets.get(path, TextureAtlas.class);
+    }
+
+    public static Sound getSound(String path) {
+        return assets.get(path, Sound.class);
+    }
+
+    public static Music getMusic(String path) {
+        return assets.get(path, Music.class);
+    }
+
+    public static void dispose() {
+        assets.dispose();
+    }
 }
