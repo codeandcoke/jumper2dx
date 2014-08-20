@@ -42,7 +42,7 @@ public class MainMenuScreen implements Screen {
         TextButton playButton = new TextButton("PLAY GAME", game.getSkin());
         playButton.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                dispose();
+                //dispose();
                 game.setScreen(new GameScreen(game));
             }
         });

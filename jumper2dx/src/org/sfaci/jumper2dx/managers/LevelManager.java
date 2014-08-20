@@ -30,9 +30,9 @@ public class LevelManager {
 	public static final String LEVEL_EXTENSION = ".tmx";
 
 	// NPC del nivel actual
-	public static Array<Enemy> enemies = new Array<Enemy>();
-	public static Array<Item> items = new Array<Item>();
-	public static Array<Platform> platforms = new Array<Platform>();
+	public Array<Enemy> enemies;
+	public Array<Item> items;
+	public Array<Platform> platforms;
 	
 	// Mapa del nivel actual
 	public TiledMap map;
@@ -53,6 +53,10 @@ public class LevelManager {
         currentCoins = 0;
         totalCoins = 0;
         highLevel = true;
+
+        enemies = new Array<Enemy>();
+        items = new Array<Item>();
+        platforms = new Array<Platform>();
     }
 	
 	public void passCurrentLevel() {
@@ -114,7 +118,7 @@ public class LevelManager {
 					
 					enemy = new Enemy();
 					enemy.position.set(rect.x, rect.y);
-					LevelManager.enemies.add(enemy);
+					enemies.add(enemy);
 				}
 			}
 		}
@@ -145,7 +149,7 @@ public class LevelManager {
 		    public void run() {
 		    	Item item = new Item();
 				item.position.set(x, y);
-				LevelManager.items.add(item);
+				items.add(item);
 		    }
 		}, 1);
 	}
@@ -184,7 +188,7 @@ public class LevelManager {
 					
 					platform = new Platform(rect.x, rect.y, TiledMapManager.PLATFORM_WIDTH, TiledMapManager.PLATFORM_HEIGHT, 
 										    Integer.valueOf((String) rectangleObject.getProperties().get("offset")), direction);
-					LevelManager.platforms.add(platform);
+					platforms.add(platform);
 				}
 			}
 		}
@@ -194,9 +198,9 @@ public class LevelManager {
 	 * Elimina los personajes del el nivel actual
 	 */
 	public void clearCharactersCurrentLevel() {
-		LevelManager.enemies.clear();
-		LevelManager.items.clear();
-		LevelManager.platforms.clear();
+		enemies.clear();
+		items.clear();
+		platforms.clear();
 	}
 	
 	/**

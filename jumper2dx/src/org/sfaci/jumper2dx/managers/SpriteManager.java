@@ -109,7 +109,7 @@ public class SpriteManager {
 		checkCollisions();
 		
 		// Comprueba el estado de los enemigos
-		for (Enemy enemy : LevelManager.enemies) {
+		for (Enemy enemy : levelManager.enemies) {
 			
 			// Si la cámara no los enfoca no se actualizan
 			if (!camera.frustum.pointInFrustum(new Vector3(enemy.position.x, enemy.position.y, 0)))
@@ -118,17 +118,17 @@ public class SpriteManager {
 			if (enemy.isAlive)
 				enemy.update(dt);
 			else
-				LevelManager.enemies.removeValue(enemy, true);
+				levelManager.enemies.removeValue(enemy, true);
 		}
 
-		for (Platform platform : LevelManager.platforms)
+		for (Platform platform : levelManager.platforms)
 			platform.update(dt);
 		
-		for (Item item : LevelManager.items)
+		for (Item item : levelManager.items)
 			if (item.isAlive)
 				item.update(dt);
 			else
-				LevelManager.items.removeValue(item, true);
+				levelManager.items.removeValue(item, true);
 	}
 
     public void draw() {
@@ -149,9 +149,9 @@ public class SpriteManager {
         batch.begin();
         // Pinta al jugador
         player.render(batch);
-        for (Enemy enemy : LevelManager.enemies)
+        for (Enemy enemy : levelManager.enemies)
             enemy.render(batch);
-        for (Item item : LevelManager.items)
+        for (Item item : levelManager.items)
             item.render(batch);
         // Pinta la información en partida relativa al jugador
         font.setScale(0.7f);
@@ -161,7 +161,7 @@ public class SpriteManager {
         font.draw(batch, " X " + levelManager.currentLives, camera.position.x + 50, camera.position.y - 135);
         font.draw(batch, "level " + levelManager.currentLevel, camera.position.x + 100, camera.position.y - 135);
         // Pinta las plataformas móviles del nivel actual
-        for (Platform platform : LevelManager.platforms)
+        for (Platform platform : levelManager.platforms)
             platform.render(batch);
 
         batch.end();
@@ -176,7 +176,7 @@ public class SpriteManager {
 		playerRect.set(player.position.x, player.position.y, Player.WIDTH, Player.HEIGHT);
 		
 		// Comprueba si el enemigo ha chocado contra algún enemigo
-		for (Enemy enemy : LevelManager.enemies) {
+		for (Enemy enemy : levelManager.enemies) {
 			Rectangle enemyRect = new Rectangle();
 			enemyRect.set(enemy.position.x, enemy.position.y, Enemy.WIDTH, Enemy.HEIGHT);
 			
@@ -185,7 +185,7 @@ public class SpriteManager {
 				// Si el jugador está por encima elimina el enemigo
 				if (player.position.y > (enemy.position.y + 5)) {
 					ResourceManager.getSound("sounds/kick.wav").play();
-					LevelManager.enemies.removeValue(enemy, true);
+					levelManager.enemies.removeValue(enemy, true);
 					
 					// El jugador rebota
 					player.jump(false);
@@ -199,20 +199,20 @@ public class SpriteManager {
 		}
 		
 		// Comprueba si el jugador recoge algún item de la pantalla
-		for (Item item : LevelManager.items) {
+		for (Item item : levelManager.items) {
 			Rectangle itemRect = new Rectangle();
 			itemRect.set(item.position.x, item.position.y, Item.WIDTH, Item.HEIGHT);
 			
 			if (itemRect.overlaps(playerRect)) {
 				ResourceManager.getSound("sounds/1up.wav").play();
-				LevelManager.items.removeValue(item, true);
+				levelManager.items.removeValue(item, true);
 				levelManager.currentLives++;
 			}
 		}
 		
 		boolean stuck = false;
 		// Comprueba colisiones con las plataformas móviles de la pantalla
-		for (Platform platform : LevelManager.platforms) {
+		for (Platform platform : levelManager.platforms) {
 			Rectangle platformRectangle = new Rectangle(platform.position.x, platform.position.y, platform.width, platform.height);
 				
 			// Si colisiona con una se coloca encima y se "pega" a ella
@@ -315,5 +315,7 @@ public class SpriteManager {
         music.dispose();
         font.dispose();
         batch.dispose();
+
+        levelManager.clearCharactersCurrentLevel();
     }
 }

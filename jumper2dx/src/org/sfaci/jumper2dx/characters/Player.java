@@ -78,6 +78,7 @@ public class Player {
 		velocity = new Vector2();
 		state = State.IDLE_RIGHT;
 		this.spriteManager = spriteManager;
+        dead = false;
 		
 		// Posiciones estáticas del personaje para izquierda y derecha en parado y salto
         TextureAtlas atlas = ResourceManager.assets.get("characters/characters.pack", TextureAtlas.class);
@@ -253,7 +254,6 @@ public class Player {
 			} catch (InterruptedException ie) {}
             ResourceManager.getSound("sounds/game_over.wav").play();
             spriteManager.game.getScreen().dispose();
-            spriteManager.levelManager.restartCurrentLevel();
 			spriteManager.game.setScreen(new MainMenuScreen(spriteManager.game));
 		}
 		else {
