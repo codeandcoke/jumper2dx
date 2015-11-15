@@ -3,4 +3,8 @@
 
 # generated files
 bin/
-gen/
+gen
+out/
+
+# mac files
+.DS_Store
