@@ -6,5 +6,7 @@ bin/
 gen
 out/
 
+.idea
+
 # mac files
 .DS_Store
