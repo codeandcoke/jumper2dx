@@ -5,6 +5,9 @@
 bin/
 gen
 out/
+build/
+*.jar
+.gradle
 
 .idea
 
