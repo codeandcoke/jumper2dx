@@ -1,6 +1,10 @@
 package com.codeandcoke.jumper2dx.managers;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +29,7 @@ import com.badlogic.gdx.math.Vector3;
  * @author Santiago Faci
  * @version Agosto 2014
  */
-public class SpriteManager {
+public class SpriteManager implements ControllerListener{
 
 	public Jumper2DX game;
 
@@ -40,6 +44,11 @@ public class SpriteManager {
     public Music music;
 
     public LevelManager levelManager;
+
+    enum PlayerState {
+    	IDLE, LEFT, RIGHT, UP, DOWN
+	}
+	private PlayerState playerState;
 	
 	public SpriteManager(Jumper2DX game) {
         this.game = game;
@@ -58,7 +67,10 @@ public class SpriteManager {
         Gdx.gl.glCullFace(GL20.GL_CULL_FACE);
 
         loadCurrentLevel();
-    }
+
+		Controllers.addListener(this);
+		playerState = PlayerState.IDLE;
+	}
 
     /**
      * Carga el nivel actual
@@ -233,7 +245,7 @@ public class SpriteManager {
 	private void handleInput() {
 		
 		// Se pulsa la teclad derecha
-		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+		if ((Gdx.input.isKeyPressed(Keys.RIGHT)) || (playerState == PlayerState.RIGHT)) {
 			player.isRunning = true;
 			Player.stuckPlatform = null;
 			player.velocity.x = Player.WALKING_SPEED;
@@ -243,7 +255,7 @@ public class SpriteManager {
 				player.isRunning = true;
 		}
 		// Se pulsa la tecla izquierda
-		else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+		else if ((Gdx.input.isKeyPressed(Keys.LEFT)) || (playerState == PlayerState.LEFT)) {
 			player.isRunning = true;
 			Player.stuckPlatform = null;
 			player.velocity.x = -Player.WALKING_SPEED;
@@ -267,17 +279,14 @@ public class SpriteManager {
 		
 		// Se pulsa la tecla CONTROL IZQ (salto)
 		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-			
-			Player.stuckPlatform = null;
-			if (player.canJump) {
-				player.jump(true);
-			}
+
+			player.tryJump();
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
+		if ((Gdx.input.isKeyPressed(Keys.UP)) || (playerState == PlayerState.UP)) {
 			CAMERA_OFFSET += 40f * Gdx.graphics.getDeltaTime();
 		}
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+		if ((Gdx.input.isKeyPressed(Keys.DOWN)) || (playerState == PlayerState.DOWN)) {
 			CAMERA_OFFSET -= 40f * Gdx.graphics.getDeltaTime();
 		}
 		
@@ -312,4 +321,99 @@ public class SpriteManager {
 
         levelManager.clearCharactersCurrentLevel();
     }
+
+	@Override
+	public void connected(Controller controller) {
+
+	}
+
+	@Override
+	public void disconnected(Controller controller) {
+
+	}
+
+	@Override
+	public boolean buttonDown(Controller controller, int buttonCode) {
+
+    	switch (buttonCode) {
+			case 0:
+				// Nothing
+				break;
+			case 1:
+				// Nothing
+				break;
+			case 2:
+				player.tryJump();
+				break;
+			case 3:
+				// Nothing
+				break;
+			default:
+				break;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean buttonUp(Controller controller, int buttonCode) {
+		return false;
+	}
+
+	@Override
+	public boolean axisMoved(Controller controller, int axisCode, float value) {
+
+        // Player moves around X axis
+    	if (axisCode == 0) {
+    	    // Player pushes to go right
+			if (value == 1.0f) {
+				playerState = PlayerState.RIGHT;
+			}
+			// Player pushes to go left
+			else if (value == -1.0f) {
+				playerState = PlayerState.LEFT;
+			}
+			// Player release axis control
+			else {
+				playerState = PlayerState.IDLE;
+			}
+		}
+		// Player moves around Y axis
+		else {
+    	    // Player pushes to go up
+			if (value == 1.0f) {
+				playerState = PlayerState.DOWN;
+			}
+			// Player pushes to go down
+			else if (value == -1.0f) {
+				playerState = PlayerState.UP;
+			}
+			// Player release axis control
+			else {
+				playerState = PlayerState.IDLE;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+		return false;
+	}
+
+	@Override
+	public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
+		return false;
+	}
+
+	@Override
+	public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
+		return false;
+	}
+
+	@Override
+	public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
+		return false;
+	}
 }

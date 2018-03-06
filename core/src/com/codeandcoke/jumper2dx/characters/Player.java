@@ -231,6 +231,16 @@ public class Player {
 		canJump = false;
 		isJumping = true;
 	}
+
+    /**
+     * Check if the player can jump. Then, jump. Otherwise player does nothing
+     */
+	public void tryJump() {
+		Player.stuckPlatform = null;
+		if (canJump) {
+			jump(true);
+		}
+	}
 	
 	/**
 	 * El jugador muere
