@@ -1,18 +1,17 @@
 package com.codeandcoke.jumper2dx.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.codeandcoke.jumper2dx.Jumper2DX;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
-		configuration.title = "Jumper2DX";
-		configuration.width = 1024;
-		configuration.height = 600;
-		configuration.fullscreen = false;
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setForegroundFPS(60);
+		config.setTitle("Jumper2DX");
+		config.setWindowSizeLimits(1024, 768, 1024, 768);
 
 
-		new LwjglApplication(new Jumper2DX(), configuration);
+		new Lwjgl3Application(new Jumper2DX(), config);
 	}
 }
